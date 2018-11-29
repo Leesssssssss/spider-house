@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <!-- element 组件样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+
+<body>
+    <div id="app">
+        <el-dialog :visible.sync="isSignin" title="登录">
+            <el-form :model="signinForm" status-icon ref="signinForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="用户名">
+                    <el-input v-model.number="signinForm.userName"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="pass">
+                    <el-input type="password" v-model="signinForm.passWord" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitSigninForm">提交</el-button>
+                    <el-button type="primary" @click="handle">注册</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+        <el-dialog :visible.sync="isSignup" title="注册">
+            <el-form :model="signinForm" status-icon ref="signinForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="用户名">
+                    <el-input v-model.number="signupForm.userName"></el-input>
+                </el-form-item>
+                <el-form-item label="密码">
+                    <el-input type="password" v-model="signupForm.passWord" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码">
+                    <el-input type="password" v-model="signupForm.resetPassword" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="submitSignupForm">提交</el-button>
+                    <el-button type="primary" @click="handle">返回登录</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+    </div>
+</body>
+<!-- 引入vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入 element UI 组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- 引入axios 实现与服务器信息通信 -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                isSignin: true,
+                isSignup: false,
+                signinForm: {
+                    userName: '',
+                    passWord: ''
+                },
+                signupForm: {
+                    userName: '',
+                    passWord: '',
+                    resetPassword: ''
+                }
+            }
+        },
+        methods: {
+            submitSigninForm() {
+                console.log(this.signinForm);
+                if (!this.signinForm.userName) {
+                    alert('请输入用户名')
+                    return;
+                } else if (!this.signinForm.passWord) {
+                    alert('请输入密码')
+                    return;
+                }
+                axios.post('/signin', this.signinForm).then((result) => {
+                    if (result.data === 'no') {
+                        alert('请输入正确的用户名或密码！');
+                        return;
+                    }
+                    location.href = '/info.html'
+                })
+            },
+            submitSignupForm() {
+                console.log(this.signupForm);
+                if (!this.signupForm.userName) {
+                    alert('请输入用户名')
+                    return;
+                } else if (!this.signupForm.passWord || !this.signupForm.resetPassword) {
+                    alert('请输入密码或确认密码')
+                    return;
+                } else if (this.signupForm.passWord !== this.signupForm.resetPassword) {
+                    alert('请确保两次密码一致')
+                    return;
+                }
+                axios.post('/signup', this.signupForm).then((result) => {
+                    console.log(result)
+                    if (result.data === 'no') {
+                        alert('用户名已经被注册')
+                        return;
+                    }
+                    alert('注册成功,请重新登录！')
+                })
+            },
+            handle() {
+                this.isSignin = !this.isSignin;
+                this.isSignup = !this.isSignup;
+            }
+        }
+    })
+</script>
+
+</html>

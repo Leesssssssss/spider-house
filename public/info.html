@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>信息</title>
+  <!-- element 组件样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+
+<body>
+  <div id="app">
+    <el-table :data="infoArr" style="width: 100%">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="楼层：">
+              <span>{{ props.row.house_floor }}</span>
+            </el-form-item>
+            <el-form-item label="规格：">
+              <span>{{ props.row.house_area }}</span>
+            </el-form-item>
+            <el-form-item label="价格：">
+              <span>{{ props.row.house_price }}</span>
+            </el-form-item>
+            <el-form-item label="房源朝向：">
+              <span>{{ props.row.house_toward }}</span>
+            </el-form-item>
+            <el-form-item label="房源年代：">
+              <span>{{ props.row.house_year }}</span>
+            </el-form-item>
+            <el-form-item label="房源地址：">
+              <span>{{ props.row.house_location }}</span>
+            </el-form-item>
+            <el-form-item label="房源描述：">
+              <span>{{ props.row.house_title }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <el-table-column label="房源位置" prop="house_location">
+      </el-table-column>
+      <el-table-column label="规格" prop="house_area">
+      </el-table-column>
+      <el-table-column label="价格" prop="house_price">
+      </el-table-column>
+    </el-table>
+  </div>
+</body>
+<!-- 引入vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入 element UI 组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- 引入axios 实现与服务器信息通信 -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+  let app = new Vue({
+    el: '#app',
+    data: {
+      infoArr: [],
+      tableData5: [{
+        id: '12987122',
+        name: '好滋好味鸡蛋仔',
+        category: '江浙小吃、小吃零食',
+        desc: '荷兰优质淡奶，奶香浓而不腻',
+        address: '上海市普陀区真北路',
+        shop: '王小虎夫妻店',
+        shopId: '10333'
+      }, {
+        id: '12987123',
+        name: '好滋好味鸡蛋仔',
+        category: '江浙小吃、小吃零食',
+        desc: '荷兰优质淡奶，奶香浓而不腻',
+        address: '上海市普陀区真北路',
+        shop: '王小虎夫妻店',
+        shopId: '10333'
+      }, {
+        id: '12987125',
+        name: '好滋好味鸡蛋仔',
+        category: '江浙小吃、小吃零食',
+        desc: '荷兰优质淡奶，奶香浓而不腻',
+        address: '上海市普陀区真北路',
+        shop: '王小虎夫妻店',
+        shopId: '10333'
+      }, {
+        id: '12987126',
+        name: '好滋好味鸡蛋仔',
+        category: '江浙小吃、小吃零食',
+        desc: '荷兰优质淡奶，奶香浓而不腻',
+        address: '上海市普陀区真北路',
+        shop: '王小虎夫妻店',
+        shopId: '10333'
+      }]
+    },
+    mounted() {
+      this.getInfo();
+    },
+    methods: {
+      getInfo() {
+        console.log('123');
+        axios.get('/getInfo').then((result) => {
+          result = result.data;
+          this.infoArr = JSON.parse(result);
+          console.log(JSON.parse(result));
+        }).catch((err) => {
+        });
+      }
+    }
+  })
+</script>
+
+</html>
